@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Parser</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <style>
+	label {
+	  display: inline-block;
+	  width: 150px;
+	  text-align: right;
+	}
+  </style>
+</head>
+<body>
+	<h1 class="p-2 bg-light d-flex justify-content-center">Resume Parser</h1>
+	<div class="d-flex">
+		<form class="p-3" id="uploadResume" enctype="multipart/form-data" action="/api/v1/uploadresume" method="post">
+		  <input type="file" id="selectFiles" accept=".docx" name="resume">
+		  <button class="btn btn-outline-warning">Upload</button>
+		</form>
+		<form class="p-3" id="viewResume" method="get" action="/api/v1/viewresume">
+		  <button class="btn btn-outline-success">View Parsed Resume</button>
+		</form>
+	</div>
+	
+	<% if (resume) {%>
+		<h4>Parsed Resume Information</h4>
+		<div id="resume-info" class="p-2">
+			<div id="name">
+				<label>Name: </label>
+				<input class="col-sm-5" type="text" value="<%= resume.name %>">
+			</div>
+			<div id="email">
+				<label>Email: </label>
+				<input class="col-sm-5" type="text" value="<%= resume.email %>">
+			</div>
+			<div class="phone">
+				<label>Phone: </label>
+				<input class="col-sm-5" type="text" value="<%= resume.phone %>">
+			</div>
+			<div id="address">
+				<label>Address: </label>
+				<input class="col-sm-5" type="text" value="<%= resume.address %>">
+			</div>
+			<div id="education">
+				<label>Education: </label>
+				<input class="col-sm-5" type="text" value="<%= resume.education %>">
+			</div>
+			<div id="experience">
+				<label>Work Experience: </label>
+				<input class="col-sm-5" type="text" value="<%= resume.experience %>">
+			</div>
+			<div id="skills">
+				<label>Skills: </label>
+				<input class="col-sm-5" type="text" value="<%= resume.skills %>">
+			</div>
+			<div id="projects">
+				<label>Projects: </label>
+				<input class="col-sm-5" type="text" value="<%= resume.projects %>">
+			</div>
+			<div id="projects">
+				<label>Languages: </label>
+				<input class="col-sm-5" type="text" value="<%= resume.languages %>">
+			</div>
+			<div id="interests">
+				<label>Interests: </label>
+				<input class="col-sm-5" type="text" value="<%= resume.interests %>">
+			</div>
+			<div id="summary">
+				<label>Summary: </label>
+				<input class="col-sm-5" type="text" value="<%= resume.summary %>">
+			</div>
+		</div>
+	<%} %>
+</body>
+</html>
