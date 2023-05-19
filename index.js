@@ -40,7 +40,9 @@ const upload = multer({
 })
 
 app.get('/',(req,res)=>{
-    res.render("index")
+    res.render("index",{
+        resume:''
+    })
 })
 
 app.post('/api/v1/uploadresume',upload.single("resume"), (req,res)=>{
