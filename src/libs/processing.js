@@ -27,9 +27,7 @@ function processFile(file, cbAfterProcessing) {
  * @returns {string}
  */
 function cleanTextByRows(data) {
-  var rows,
-    clearRow,
-    clearRows = [];
+  var rows,clearRow,clearRows = [];
 
   rows = data.split("\n");
   for (var i = 0; i < rows.length; i++) {

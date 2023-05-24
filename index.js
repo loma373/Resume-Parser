@@ -6,6 +6,9 @@ const port=process.env.PORT || 3000
 const path=require("path")
 const multer=require("multer")
 const fs=require("fs")
+var SomeHR = require('./src/SomeHR')();
+require('colors');
+
 
 const app=express()
 app.set("view engine","ejs")
@@ -39,6 +42,50 @@ const upload = multer({
     storage: multerStorage,
 })
 
+function main() {
+    var getFileNames = function (filePaths) {
+      return filePaths.map(function (file) {
+        return path.basename(file);
+      }).join(', ');
+    };
+  
+    var pack = __dirname + '/public';
+    SomeHR.iHaveCVPack(pack, function (err, files) {
+      var Iam = this,
+        ParseBoy,
+        savedFiles = 0;
+  
+      if (err) {
+        return Iam.explainError(err);
+      }
+      if (!files.length) {
+        return Iam.nothingToDo();
+      }
+  
+      /** @type {ParseBoy} */
+      ParseBoy = Iam.needSomeoneToSortCV();
+  
+      ParseBoy.willHelpWithPleasure(files, function (PreparedFile) {
+        
+        ParseBoy.workingHardOn(PreparedFile, function (Resume) {
+          
+          ParseBoy.storeResume(PreparedFile, Resume, __dirname + '/compiled', function (err) {
+            if (err) {
+              return ParseBoy.explainError(err);
+            }
+  
+            savedFiles += 1;
+  
+            if (savedFiles == files.length) {
+              ParseBoy.say('I finished! Please, check "/compile" folder where you can find each parsed profile in JSON');
+            }
+          })
+        });
+      });
+    });
+  }
+  
+
 app.get('/',(req,res)=>{
     res.render("index",{
         resume:''
@@ -58,7 +105,7 @@ app.post('/api/v1/uploadresume',upload.single("resume"), (req,res)=>{
         }
     })
     console.log(req.file)
-    const resumeparser=require("./app.js");
+    main();
     res.redirect('/')
 
 })
@@ -89,9 +136,7 @@ app.get('/api/v1/viewresume',(req,res)=>{
                 //parsing string now
                 try {
                     const candidate=JSON.parse(jsonString)
-                    res.render("index",{
-                        resume:candidate
-                    })
+                    res.send(candidate)
                 } catch (error) {
                     console.log("error in parsing string",err)
                 }

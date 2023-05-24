@@ -6,10 +6,10 @@ module.exports = {
   titles: {
     objective: ['objective', 'objectives'],
     summary: ['summary'],
-    experience: ['experience'],
-    education: ['education'],
-    skills: ['skills', 'Skills & Expertise', 'technology', 'technologies', 'concepts'],
-    languages: ['languages', 'linguals'],
+    experience: ['experience', 'work'],
+    education: ['education', 'enlightenment', 'indoctrination'], 
+    skills: ['skills', 'Skills & Expertise', 'Technology', 'Technologies', 'Concepts'],
+    languages: ['languages', 'linguals', 'ligustics'],
     courses: ['courses', 'courses completed'],
     projects: ['projects', 'personal projects'],
     links: ['links'],
@@ -19,37 +19,14 @@ module.exports = {
     honors: ['honors'],
     certification: ['certification', 'certifications', 'certificates'],
     interests: ['interests', 'areas of interest'],
-    dob: ['DOB','Date of Birth', 'Birthday']
+    dob: ['DOB','Date of Birth', 'Birthday'],
+    address: ['Address', 'Residence', 'Permanent Address']
   },
   profiles: [
-    ['github.com', function(url, Resume, profilesWatcher) {
-      download(url, function(data, err) {
-        if (data) {
-          var $ = cheerio.load(data),
-            fullName = $('.vcard-fullname').text(),
-            location = $('.octicon-location').parent().text(),
-            mail = $('.octicon-mail').parent().text(),
-            link = $('.octicon-link').parent().text(),
-            clock = $('.octicon-clock').parent().text(),
-            company = $('.octicon-organization').parent().text();
-
-          Resume.addObject('github', {
-            name: fullName,
-            location: location,
-            email: mail,
-            link: link,
-            joined: clock,
-            company: company
-          });
-        } else {
-          return console.log(err);
-        }
-        //profilesInProgress--;
-        profilesWatcher.inProgress--;
-      });
-    }],
     ['linkedin.com', function(url, Resume, profilesWatcher) {
       download(url, function(data, err) {
+        console.log(url)
+        console.log(data)
         if (data) {
           var $ = cheerio.load(data),
             linkedData = {
@@ -90,40 +67,15 @@ module.exports = {
               period: $pastPosition.find('.experience-date-locale').text()
             });
           });
-          _.forEach($languages, function(language) {
-            linkedData.languages.push($(language).text());
-          });
-          _.forEach($skills, function(skill) {
-            linkedData.skills.push($(skill).text());
-          });
-          _.forEach($educations, function(education) {
-            var $education = $(education);
-            linkedData.educations.push({
-              title: $education.find('header > h4').text(),
-              major: $education.find('header > h5').text(),
-              date: $education.find('.education-date').text()
-            });
-          });
-          _.forEach($volunteeringListing, function(volunteering) {
-            linkedData.volunteering.push($(volunteering).text());
-          });
-          _.forEach($volunteeringOpportunities, function(volunteering) {
-            linkedData.volunteeringOpportunities.push($(volunteering).text());
-          });
-
           Resume.addObject('linkedin', linkedData);
         } else {
-          return console.log(err);
+          console.log("data not loaded");
         }
         profilesWatcher.inProgress--;
       });
     }],
-    'facebook.com',
-    'bitbucket.org',
-    'stackoverflow.com'
   ],
   inline: {
-    address: 'address',
     skype: 'skype'
   },
   regular: {
@@ -136,6 +88,9 @@ module.exports = {
     email: [
       /([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})/
     ]
+    // company: [
+    //   /(?<=\n)([A-Za-z]+\.?\s?[A-Za-z]+)(?=(,|\n-))/
+    // ]
   }
 };
 

@@ -28,8 +28,7 @@ function makeRegExpFromDictionary() {
   });
 
   _.forEach(dictionary.profiles, function(profile) {
-    var profileHandler,
-      profileExpr;
+    var profileHandler,profileExpr;
 
     if (_.isArray(profile)) {
       if (_.isFunction(profile[1])) {
@@ -71,11 +70,11 @@ function parse(PreparedFile, cbReturnResume) {
     row = rows[i];
 
     // parse profiles
-    row = rows[i];
+    row = rows[i] = parseDictionaryProfiles(row, Resume);
     //  parse titles
     parseDictionaryTitles(Resume, rows, i);
     // parse inlines
-    parseDictionaryInline(Resume, row);
+    //parseDictionaryInline(Resume, row);
   }
 
   if (_.isFunction(cbReturnResume)) {
@@ -140,8 +139,7 @@ function parseDictionaryInline(Resume, row) {
  * @param Resume
  */
 function parseDictionaryRegular(data, Resume) {
-  var regularDictionary = dictionary.regular,
-    find;
+  var regularDictionary = dictionary.regular,find;
     //console.log(regularDictionary)
 
   _.forEach(regularDictionary, function(expressions, key) {
@@ -171,7 +169,7 @@ function parseDictionaryTitles(Resume, rows, rowIdx) {
 
   _.forEach(dictionary.titles, function(expressions, key) {
     expressions = expressions || [];
-    // means, that titled row is less than 5 words
+
     if (countWords(row) >= 1) {                                     //removed the 5 word array clause
       _.forEach(expressions, function(expression) {
         ruleExpression = new RegExp(expression);
@@ -199,9 +197,7 @@ function parseDictionaryTitles(Resume, rows, rowIdx) {
  * @returns {*}
  */
 function parseDictionaryProfiles(row, Resume) {
-  var regularDictionary = dictionary.profiles,
-    find,
-    modifiedRow = row;
+  var regularDictionary = dictionary.profiles,find,modifiedRow = row;
 
   _.forEach(regularDictionary, function(expression) {
     var expressionHandler;
